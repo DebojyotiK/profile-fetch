@@ -15,11 +15,15 @@ class ExplorePageState {
 
   final List<ValueNotifier<ProfileInfo>>? _profileStatesNotifier;
 
-  List<ValueNotifier<ProfileInfo>> get profileStatesNotifier => List.from(_profileStatesNotifier!);
+  List<ValueNotifier<ProfileInfo>> get profileStatesNotifier => _profileStatesNotifier!;
 
   int? _nextFetchIndex;
 
   int get nextFetchIndex => _nextFetchIndex!;
+
+  set nextFetchIndex(int value) {
+    _nextFetchIndex = value;
+  }
 
   ExplorePageState(
     this._state,
@@ -65,10 +69,8 @@ class ExplorePageState {
 
   bool loadProfiles(
     List<ProfileDTO> profiles,
-    int nextFetchIndex,
   ) {
     int i = 0;
-    _nextFetchIndex = nextFetchIndex;
     for (var e in _profileStatesNotifier!) {
       if (e.value.state == ProfileState.loading) {
         if (i < profiles.length) {
