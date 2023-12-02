@@ -4,7 +4,8 @@ import 'profile_state.dart';
 
 enum State {
   loading,
-  loaded,
+  loadedLimited,
+  loadedWheel,
   error,
 }
 
@@ -36,14 +37,14 @@ class ExplorePageState {
 
   ExplorePageState.loadedLimited(
     List<ProfileDTO> profiles,
-  )   : _state = State.loaded,
+  )   : _state = State.loadedLimited,
         _profileStatesNotifier = profiles.map((e) => ValueNotifier(ProfileInfo.loaded(e))).toList();
 
   ExplorePageState.loadedWheel(
     List<ProfileDTO> profiles,
     int totalElementsInWheel,
     this._nextFetchIndex,
-  )   : _state = State.loaded,
+  )   : _state = State.loadedWheel,
         _profileStatesNotifier = List.generate(
           totalElementsInWheel,
           (index) {
@@ -54,6 +55,10 @@ class ExplorePageState {
             }
           },
         );
+
+  ExplorePageState.error()
+      : _state = State.error,
+        _profileStatesNotifier = null;
 
   void markProfileIndicesAsInvisible(List<int> indexes) {
     for (var i in indexes) {
