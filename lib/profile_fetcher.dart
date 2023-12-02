@@ -100,4 +100,23 @@ class ProfileResult {
   });
 }
 
-class ProfileFetcher {}
+class ProfileFetcher {
+  Future<ProfileResult> getProfiles({
+    required int currentIndex,
+    required int limit,
+  }) async {
+    List<ProfileDTO> profileDatabase = List.from(_profilesAll);
+    List<ProfileDTO> profiles = profileDatabase.sublist(currentIndex, (currentIndex + limit).clamp(0, profileDatabase.length));
+    int nextIndex = (currentIndex + limit);
+    if (_isResultExhausted(nextIndex, profileDatabase)) {
+      nextIndex = 0;
+    }
+    await Future.delayed(const Duration(seconds: 1));
+    return ProfileResult(
+      nextIndex: nextIndex,
+      profiles: profiles,
+    );
+  }
+
+  bool _isResultExhausted(int nextIndex, List<ProfileDTO> profileDatabase) => nextIndex >= profileDatabase.length;
+}
