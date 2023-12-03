@@ -1,4 +1,6 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:spinner/spinner/index.dart';
 
 import 'profile_state.dart';
 
@@ -10,17 +12,15 @@ enum State {
 }
 
 class ExplorePageState {
-  final State _state;
 
   State get state => _state;
-
-  final List<ValueNotifier<ProfileInfo>>? _profileStatesNotifier;
+  final State _state;
 
   List<ValueNotifier<ProfileInfo>> get profileStatesNotifier => _profileStatesNotifier!;
-
-  int? _nextFetchIndex;
+  final List<ValueNotifier<ProfileInfo>>? _profileStatesNotifier;
 
   int get nextFetchIndex => _nextFetchIndex!;
+  int? _nextFetchIndex;
 
   final int? _elementsInWheel;
 
@@ -28,27 +28,33 @@ class ExplorePageState {
     _nextFetchIndex = value;
   }
 
-  ExplorePageState(
-    this._state,
-    this._profileStatesNotifier,
-    this._elementsInWheel,
-  );
+  CarouselController get carouselController => _carouselController!;
+  final CarouselController? _carouselController;
+
+  SpinnerController get spinnerController => _spinnerController!;
+  final SpinnerController? _spinnerController;
 
   ExplorePageState.loading()
       : _state = State.loading,
         _profileStatesNotifier = null,
-        _elementsInWheel = null;
+        _elementsInWheel = null,
+        _carouselController = null,
+        _spinnerController = null;
 
   ExplorePageState.loadedLimited(
     List<ProfileDTO> profiles,
   )   : _state = State.loadedLimited,
         _profileStatesNotifier = profiles.map((e) => ValueNotifier(ProfileInfo.loaded(e))).toList(),
-        _elementsInWheel = null;
+        _elementsInWheel = null,
+        _carouselController = null,
+        _spinnerController = null;
 
   ExplorePageState.loadedWheel({
     required List<ProfileDTO> profiles,
     required int elementsInWheel,
     required int nextFetchIndex,
+    required CarouselController carouselController,
+    required SpinnerController spinnerController,
   })  : _state = State.loadedWheel,
         _nextFetchIndex = nextFetchIndex,
         _elementsInWheel = elementsInWheel,
@@ -61,12 +67,16 @@ class ExplorePageState {
               return ValueNotifier(ProfileInfo.notVisible());
             }
           },
-        );
+        ),
+        _carouselController = carouselController,
+        _spinnerController = spinnerController;
 
   ExplorePageState.error()
       : _state = State.error,
         _elementsInWheel = null,
-        _profileStatesNotifier = null;
+        _profileStatesNotifier = null,
+        _carouselController = null,
+        _spinnerController = null;
 
   void markProfileIndicesAsInvisible(List<int> indexes) {
     for (var i in indexes) {
