@@ -7,6 +7,7 @@ import 'package:profile_fetch/carousel_profile_view.dart';
 import 'package:profile_fetch/profile_bloc.dart';
 import 'package:profile_fetch/wheel_profile_view.dart';
 import 'package:spinner/spinner/index.dart';
+import 'package:spinner/spinner/typedefs.dart';
 
 import 'explore_page_state_data.dart';
 
@@ -21,15 +22,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
   final ProfileBloc _profileBloc = ProfileBloc();
 
   bool get _showIndex => true;
-  bool _postFrameCallbackCalled = false;
 
   @override
   void initState() {
     super.initState();
     _profileBloc.fetchProfiles();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _postFrameCallbackCalled = true;
-    });
   }
 
   @override
@@ -64,20 +61,24 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     showIndex: _showIndex,
                   );
                 },
-                onEnteredViewPort: (indices) {
+                onEnteredViewPort: (indices, reason) {
                   debugPrint("$indices entered view port");
-                  value.markProfileIndicesAsLoading(indices);
+                  if (reason != SpinnerChangeReason.initialize) {
+                    value.markProfileIndicesAsLoading(indices);
+                  }
                 },
-                onLeftViewPort: (indices) {
+                onLeftViewPort: (indices, reason) {
                   debugPrint("$indices left view port");
-                  value.markProfileIndicesAsInvisible(indices);
+                  if (reason != SpinnerChangeReason.initialize) {
+                    value.markProfileIndicesAsInvisible(indices);
+                  }
                 },
                 onElementTapped: (index) {
                   debugPrint("$index was tapped");
                 },
-                onElementCameToCenter: (index) {
+                onElementCameToCenter: (index, reason) {
                   debugPrint("$index came to center");
-                  if (value.carouselController.ready) {
+                  if (value.carouselController.ready && reason == SpinnerChangeReason.scrollEnd) {
                     value.carouselController.animateToPage(_profileBloc.wheelToCarouselIndex(index));
                   }
                 },
