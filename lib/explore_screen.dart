@@ -19,12 +19,17 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen> {
   final ProfileBloc _profileBloc = ProfileBloc();
-  bool get _showIndex => false;
+
+  bool get _showIndex => true;
+  bool _postFrameCallbackCalled = false;
 
   @override
   void initState() {
     super.initState();
     _profileBloc.fetchProfiles();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _postFrameCallbackCalled = true;
+    });
   }
 
   @override
@@ -76,6 +81,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 },
                 onElementCameToCenter: (index) {
                   debugPrint("$index came to center");
+                  if (value.carouselController.ready) {
+                    value.carouselController.animateToPage(_profileBloc.wheelToCarouselIndex(index));
+                  }
                 },
                 spinnerController: value.spinnerController,
               ),
@@ -112,6 +120,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
         );
       },
+      carouselController: value.carouselController,
     );
   }
 
