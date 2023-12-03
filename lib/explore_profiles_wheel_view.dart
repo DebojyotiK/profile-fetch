@@ -41,7 +41,7 @@ class ExploreProfilesWheelView extends StatelessWidget {
           elementBuilder: (index) {
             return WheelProfileView(
               index: index,
-              state: stateData.profileStatesNotifier[index],
+              state: stateData.profileStates[index],
               showIndex: showIndex,
             );
           },
@@ -89,13 +89,13 @@ class ExploreProfilesWheelView extends StatelessWidget {
           value.spinnerController.bringElementAtIndexToCenter(profileBloc.carouselToWheelIndex(index));
         },
       ),
-      itemCount: value.profileStatesNotifier.length,
+      itemCount: value.profileStates.length,
       itemBuilder: (context, index, realIndex, offset) {
         int wheelIndex = profileBloc.carouselToWheelIndex(index);
         return CarouselProfileView(
           carouselIndex: index,
           wheelIndex: wheelIndex,
-          state: value.profileStatesNotifier[wheelIndex],
+          state: value.profileStates[wheelIndex],
           showIndex: showIndex,
           offset: offset,
           onSendRequest: () {

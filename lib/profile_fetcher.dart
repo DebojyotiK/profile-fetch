@@ -124,7 +124,7 @@ class ProfileFetcher {
   }
 
   Future<ProfileResult> _getProfilesInt(int currentIndex, int limit) async {
-    List<ProfileDTO> profileDatabase = List.from(profilesAll);
+    List<ProfileDTO> profileDatabase = List.from(profilesMini);
     List<ProfileDTO> profiles = profileDatabase.sublist(currentIndex, (currentIndex + limit).clamp(0, profileDatabase.length));
     int nextIndex = (currentIndex + limit);
     if (_isResultExhausted(nextIndex, profileDatabase)) {
