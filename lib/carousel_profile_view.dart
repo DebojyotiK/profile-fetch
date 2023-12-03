@@ -41,30 +41,27 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
   @override
   Widget build(BuildContext context) {
     bool isProfileFetched = (widget.state.value.state == ProfileState.loaded);
-    return AspectRatio(
-      aspectRatio: 0.75,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xffd7d7d7)),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0xffd7d7d7),
-              offset: Offset(-2, 1),
-              blurRadius: 13,
-              spreadRadius: 5,
-            ),
-          ],
-          borderRadius: _borderRadius,
-        ),
-        child: ClipRRect(
-          borderRadius: _borderRadius,
-          child: Container(
-            color: const Color(0xffe5e5e5),
-            child: AnimatedOpacity(
-              opacity: isProfileFetched ? 1 : 0,
-              duration: const Duration(milliseconds: 500),
-              child: isProfileFetched ? _profileView() : Container(),
-            ),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0xffd7d7d7)),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0xffd7d7d7),
+            offset: Offset(-2, 1),
+            blurRadius: 13,
+            spreadRadius: 5,
+          ),
+        ],
+        borderRadius: _borderRadius,
+      ),
+      child: ClipRRect(
+        borderRadius: _borderRadius,
+        child: Container(
+          color: const Color(0xffe5e5e5),
+          child: AnimatedOpacity(
+            opacity: isProfileFetched ? 1 : 0,
+            duration: const Duration(milliseconds: 500),
+            child: isProfileFetched ? _profileView() : Container(),
           ),
         ),
       ),

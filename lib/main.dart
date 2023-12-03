@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:profile_fetch/carousel_profile_view.dart';
 import 'package:profile_fetch/profile_fetcher.dart';
 
+import 'explore_screen.dart';
 import 'profile_state.dart';
 
 void main() {
@@ -85,20 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.background,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              width: 300,
-              child: CarouselProfileView(
-                index: 1,
-                state: ValueNotifier(ProfileInfo.loaded(profilesAll[0])),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: ExploreScreen(),
     );
   }
 }

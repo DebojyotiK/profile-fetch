@@ -4,17 +4,17 @@ import 'package:spinner/spinner/index.dart';
 
 import 'profile_state.dart';
 
-enum State {
+enum Status {
   loading,
   loadedLimited,
   loadedWheel,
   error,
 }
 
-class ExplorePageState {
+class ExplorePageStateData {
 
-  State get state => _state;
-  final State _state;
+  Status get status => _status;
+  final Status _status;
 
   List<ValueNotifier<ProfileInfo>> get profileStatesNotifier => _profileStatesNotifier!;
   final List<ValueNotifier<ProfileInfo>>? _profileStatesNotifier;
@@ -34,28 +34,28 @@ class ExplorePageState {
   SpinnerController get spinnerController => _spinnerController!;
   final SpinnerController? _spinnerController;
 
-  ExplorePageState.loading()
-      : _state = State.loading,
+  ExplorePageStateData.loading()
+      : _status = Status.loading,
         _profileStatesNotifier = null,
         _elementsInWheel = null,
         _carouselController = null,
         _spinnerController = null;
 
-  ExplorePageState.loadedLimited(
+  ExplorePageStateData.loadedLimited(
     List<ProfileDTO> profiles,
-  )   : _state = State.loadedLimited,
+  )   : _status = Status.loadedLimited,
         _profileStatesNotifier = profiles.map((e) => ValueNotifier(ProfileInfo.loaded(e))).toList(),
         _elementsInWheel = null,
         _carouselController = null,
         _spinnerController = null;
 
-  ExplorePageState.loadedWheel({
+  ExplorePageStateData.loadedWheel({
     required List<ProfileDTO> profiles,
     required int elementsInWheel,
     required int nextFetchIndex,
     required CarouselController carouselController,
     required SpinnerController spinnerController,
-  })  : _state = State.loadedWheel,
+  })  : _status = Status.loadedWheel,
         _nextFetchIndex = nextFetchIndex,
         _elementsInWheel = elementsInWheel,
         _profileStatesNotifier = List.generate(
@@ -71,8 +71,8 @@ class ExplorePageState {
         _carouselController = carouselController,
         _spinnerController = spinnerController;
 
-  ExplorePageState.error()
-      : _state = State.error,
+  ExplorePageStateData.error()
+      : _status = Status.error,
         _elementsInWheel = null,
         _profileStatesNotifier = null,
         _carouselController = null,
@@ -105,9 +105,9 @@ class ExplorePageState {
   }
 
   void removeCenterProfile(int centerIndex) {
-    if (_state == State.loadedLimited) {
+    if (_status == Status.loadedLimited) {
       _profileStatesNotifier!.removeAt(centerIndex);
-    } else if (_state == State.loadedWheel){
+    } else if (_status == Status.loadedWheel){
       int elementsOnRightSideOfCenter = _elementsInWheel!~/2;
       int totalElementsOnFullWheel = _elementsInWheel*2;
       for(int i=0;i<elementsOnRightSideOfCenter;i++){
