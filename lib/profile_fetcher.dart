@@ -1,4 +1,5 @@
 import 'profile_state.dart';
+import 'package:async/async.dart';
 
 List<ProfileDTO> _profilesAll = [
   ProfileDTO(
@@ -101,10 +102,28 @@ class ProfileResult {
 }
 
 class ProfileFetcher {
+
+  // keep a reference to CancelableOperation
+  CancelableOperation<ProfileResult>? _myCancelableFuture;
+
   Future<ProfileResult> getProfiles({
     required int currentIndex,
     required int limit,
   }) async {
+    _cancelPreviousOngoingCall();
+    _myCancelableFuture = CancelableOperation.fromFuture(
+      _getProfilesInt(currentIndex, limit),
+      onCancel: () => 'Future has been canceld',
+    );
+    final value = await _myCancelableFuture?.value;
+    return value!;
+  }
+
+  void _cancelPreviousOngoingCall() {
+    _myCancelableFuture?.cancel();
+  }
+
+  Future<ProfileResult> _getProfilesInt(int currentIndex, int limit) async {
     List<ProfileDTO> profileDatabase = List.from(_profilesAll);
     List<ProfileDTO> profiles = profileDatabase.sublist(currentIndex, (currentIndex + limit).clamp(0, profileDatabase.length));
     int nextIndex = (currentIndex + limit);
