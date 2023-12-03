@@ -117,6 +117,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
               wheelIndex: wheelIndex,
               state: value.profileStatesNotifier[wheelIndex],
               showIndex: _showIndex,
+              onSendRequest: (){
+                value.removeCenterProfile(wheelIndex);
+                _profileBloc.fetchNextProfiles();
+              },
             ),
           ),
         );
