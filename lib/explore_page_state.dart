@@ -22,6 +22,8 @@ class ExplorePageState {
 
   int get nextFetchIndex => _nextFetchIndex!;
 
+  final int? _elementsInWheel;
+
   set nextFetchIndex(int value) {
     _nextFetchIndex = value;
   }
@@ -29,24 +31,28 @@ class ExplorePageState {
   ExplorePageState(
     this._state,
     this._profileStatesNotifier,
+    this._elementsInWheel,
   );
 
   ExplorePageState.loading()
       : _state = State.loading,
-        _profileStatesNotifier = null;
+        _profileStatesNotifier = null,
+        _elementsInWheel = null;
 
   ExplorePageState.loadedLimited(
     List<ProfileDTO> profiles,
   )   : _state = State.loadedLimited,
-        _profileStatesNotifier = profiles.map((e) => ValueNotifier(ProfileInfo.loaded(e))).toList();
+        _profileStatesNotifier = profiles.map((e) => ValueNotifier(ProfileInfo.loaded(e))).toList(),
+        _elementsInWheel = null;
 
   ExplorePageState.loadedWheel(
     List<ProfileDTO> profiles,
-    int totalElementsInWheel,
+    int elementsInWheel,
     this._nextFetchIndex,
   )   : _state = State.loadedWheel,
+        _elementsInWheel = elementsInWheel,
         _profileStatesNotifier = List.generate(
-          totalElementsInWheel,
+          elementsInWheel * 2,
           (index) {
             if (index < profiles.length) {
               return ValueNotifier(ProfileInfo.loaded(profiles[index]));
@@ -58,6 +64,7 @@ class ExplorePageState {
 
   ExplorePageState.error()
       : _state = State.error,
+        _elementsInWheel = null,
         _profileStatesNotifier = null;
 
   void markProfileIndicesAsInvisible(List<int> indexes) {
@@ -72,7 +79,7 @@ class ExplorePageState {
     }
   }
 
-  bool loadProfiles(
+  void loadProfiles(
     List<ProfileDTO> profiles,
   ) {
     int i = 0;
@@ -81,12 +88,22 @@ class ExplorePageState {
         if (i < profiles.length) {
           e.value = ProfileInfo.loaded(profiles[i]);
           i++;
-        } else {
-          return false;
         }
       }
     }
-    return true;
+  }
+
+  void removeCenterProfile(int centerIndex) {
+    if (_state == State.loadedLimited) {
+      _profileStatesNotifier!.removeAt(centerIndex);
+    } else if (_state == State.loadedWheel){
+      int elementsOnRightSideOfCenter = _elementsInWheel!~/2;
+      int totalElementsOnFullWheel = _elementsInWheel*2;
+      for(int i=0;i<elementsOnRightSideOfCenter;i++){
+        _profileStatesNotifier![(centerIndex-i)%totalElementsOnFullWheel].value = _profileStatesNotifier[(centerIndex-i-1)%totalElementsOnFullWheel].value;
+      }
+      _profileStatesNotifier![(centerIndex-elementsOnRightSideOfCenter)%totalElementsOnFullWheel].value = ProfileInfo.loading();
+    }
   }
 
   int get profilesInLoadingState => _profileStatesNotifier!.where((e) => e.value.state == ProfileState.loading).length;
