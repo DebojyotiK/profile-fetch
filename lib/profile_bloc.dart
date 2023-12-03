@@ -19,7 +19,10 @@ class ProfileBloc {
       limit: elementsPerHalf,
     );
     if (profileResult.profiles.length < elementsPerHalf) {
-      explorePageNotifier.value = ExplorePageStateData.loadedLimited(profileResult.profiles);
+      explorePageNotifier.value = ExplorePageStateData.loadedLimited(
+        profiles: profileResult.profiles,
+        carouselController: CarouselController(),
+      );
     } else {
       explorePageNotifier.value = ExplorePageStateData.loadedWheel(
         profiles: profileResult.profiles,
@@ -37,7 +40,10 @@ class ProfileBloc {
       limit: explorePageNotifier.value.profilesInLoadingState,
     );
     if (_hasProfilesExhausted(profileResult)) {
-      explorePageNotifier.value = ExplorePageStateData.loadedLimited(profileResult.profiles);
+      explorePageNotifier.value = ExplorePageStateData.loadedLimited(
+        profiles: profileResult.profiles,
+        carouselController: CarouselController(),
+      );
     } else {
       int updatedProfiles = explorePageNotifier.value.loadProfiles(profileResult.profiles);
       if (_allLoadingProfilesWereUpdated(updatedProfiles)) {

@@ -41,12 +41,13 @@ class ExplorePageStateData {
         _carouselController = null,
         _spinnerController = null;
 
-  ExplorePageStateData.loadedLimited(
-    List<ProfileDTO> profiles,
-  )   : _status = Status.loadedLimited,
+  ExplorePageStateData.loadedLimited({
+    required List<ProfileDTO> profiles,
+    required CarouselController carouselController,
+  })  : _status = Status.loadedLimited,
         _profileStatesNotifier = profiles.map((e) => ValueNotifier(ProfileInfo.loaded(e))).toList(),
         _elementsInWheel = null,
-        _carouselController = null,
+        _carouselController = carouselController,
         _spinnerController = null;
 
   ExplorePageStateData.loadedWheel({
@@ -105,16 +106,17 @@ class ExplorePageStateData {
     return i;
   }
 
-  void removeCenterProfile(int centerIndex) {
+  void removeCenterProfile(int index) {
     if (_status == Status.loadedLimited) {
-      _profileStatesNotifier!.removeAt(centerIndex);
-    } else if (_status == Status.loadedWheel){
-      int elementsOnRightSideOfCenter = _elementsInWheel!~/2;
-      int totalElementsOnFullWheel = _elementsInWheel*2;
-      for(int i=0;i<elementsOnRightSideOfCenter;i++){
-        _profileStatesNotifier![(centerIndex-i)%totalElementsOnFullWheel].value = _profileStatesNotifier[(centerIndex-i-1)%totalElementsOnFullWheel].value;
+      _profileStatesNotifier!.removeAt(index);
+    } else if (_status == Status.loadedWheel) {
+      int elementsOnRightSideOfCenter = _elementsInWheel! ~/ 2;
+      int totalElementsOnFullWheel = _elementsInWheel * 2;
+      for (int i = 0; i < elementsOnRightSideOfCenter; i++) {
+        _profileStatesNotifier![(index - i) % totalElementsOnFullWheel].value =
+            _profileStatesNotifier[(index - i - 1) % totalElementsOnFullWheel].value;
       }
-      _profileStatesNotifier![(centerIndex-elementsOnRightSideOfCenter)%totalElementsOnFullWheel].value = ProfileInfo.loading();
+      _profileStatesNotifier![(index - elementsOnRightSideOfCenter) % totalElementsOnFullWheel].value = ProfileInfo.loading();
     }
   }
 

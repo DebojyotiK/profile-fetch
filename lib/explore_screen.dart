@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:profile_fetch/app_colors.dart';
+import 'package:profile_fetch/explore_limited_profiles_view.dart';
 import 'package:profile_fetch/explore_profiles_wheel_view.dart';
 import 'package:profile_fetch/profile_bloc.dart';
 
@@ -32,6 +33,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
           return _fullScreenLoader();
         } else if (value.status == Status.loadedWheel) {
           return ExploreProfilesWheelView(
+            profileBloc: _profileBloc,
+            showIndex: _showIndex,
+          );
+        } else if (value.status == Status.loadedLimited) {
+          return ExploreLimitedProfilesView(
             profileBloc: _profileBloc,
             showIndex: _showIndex,
           );

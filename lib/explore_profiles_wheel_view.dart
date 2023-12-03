@@ -89,7 +89,7 @@ class ExploreProfilesWheelView extends StatelessWidget {
           value.spinnerController.bringElementAtIndexToCenter(profileBloc.carouselToWheelIndex(index));
         },
       ),
-      itemCount: profileBloc.totalElementsInWheel,
+      itemCount: value.profileStatesNotifier.length,
       itemBuilder: (context, index, realIndex, offset) {
         int wheelIndex = profileBloc.carouselToWheelIndex(index);
         return CarouselProfileView(
