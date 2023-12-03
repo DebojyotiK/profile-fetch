@@ -39,7 +39,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           double cardWidth = MediaQuery.of(context).size.width * viewPortFraction;
           double aspectRatio = 0.75;
           double cardHeight = cardWidth / aspectRatio;
-          double radius = 160;
+          double radius = MediaQuery.of(context).size.width * 0.8 / 2;
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
