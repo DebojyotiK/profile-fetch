@@ -64,17 +64,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     showIndex: _showIndex,
                   );
                 },
-                onEnteredViewPort: (indexes) {
-                  debugPrint("$indexes entered view port");
-                  // for (var index in indexes) {
-                  //   _imageFetcher.fetchImage(index);
-                  // }
+                onEnteredViewPort: (indices) {
+                  debugPrint("$indices entered view port");
+                  value.markProfileIndicesAsLoading(indices);
                 },
-                onLeftViewPort: (indexes) {
-                  debugPrint("$indexes left view port");
-                  // for (var index in indexes) {
-                  //   _imageFetcher.cancelFetchingImage(index);
-                  // }
+                onLeftViewPort: (indices) {
+                  debugPrint("$indices left view port");
+                  value.markProfileIndicesAsInvisible(indices);
                 },
                 onElementTapped: (index) {
                   debugPrint("$index was tapped");
