@@ -85,16 +85,28 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
     bool isProfileFetched = (widget.state.value.state == ProfileState.loaded);
     return Stack(
       children: [
-        isProfileFetched ? Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Image.network(
-            widget.state.value.profileDTO.imageUrl,
-            fit: BoxFit.cover,
-          ),
-        ) : Container(),
+        isProfileFetched
+            ? Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Image.network(
+                  widget.state.value.profileDTO.imageUrl,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return const SizedBox.shrink();
+                  },
+                ),
+              )
+            : Container(),
         if (widget.showIndex)
           Positioned(
             child: Container(

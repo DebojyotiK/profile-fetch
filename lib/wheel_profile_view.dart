@@ -55,6 +55,16 @@ class _WheelProfileViewState extends State<WheelProfileView> {
               ? Image.network(
                   widget.state.value.profileDTO.imageUrl,
                   fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return const SizedBox.shrink();
+                  },
                 )
               : Container(),
         ),

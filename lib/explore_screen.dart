@@ -29,22 +29,29 @@ class _ExploreScreenState extends State<ExploreScreen> {
     return ValueListenableBuilder<ExplorePageStateData>(
       valueListenable: _profileBloc.explorePageNotifier,
       builder: (context, value, child) {
-        if (value.status == Status.loading) {
-          return _fullScreenLoader();
-        } else if (value.status == Status.loadedWheel) {
-          return ExploreProfilesWheelView(
-            profileBloc: _profileBloc,
-            showIndex: _showIndex,
-          );
-        } else if (value.status == Status.loadedLimited) {
-          return ExploreLimitedProfilesView(
-            profileBloc: _profileBloc,
-            showIndex: _showIndex,
-          );
-        }
-        return const SizedBox();
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 500),
+          child: _getScreen(value),
+        );
       },
     );
+  }
+
+  Widget _getScreen(ExplorePageStateData value) {
+    if (value.status == Status.loading) {
+      return _fullScreenLoader();
+    } else if (value.status == Status.loadedWheel) {
+      return ExploreProfilesWheelView(
+        profileBloc: _profileBloc,
+        showIndex: _showIndex,
+      );
+    } else if (value.status == Status.loadedLimited) {
+      return ExploreLimitedProfilesView(
+        profileBloc: _profileBloc,
+        showIndex: _showIndex,
+      );
+    }
+    return const SizedBox();
   }
 
   Widget _fullScreenLoader() {
