@@ -36,18 +36,14 @@ class _WheelProfileViewState extends State<WheelProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    bool isProfileFetched = (widget.state.value.state == ProfileState.loaded);
     return Container(
       color: const Color(0xffe5e5e5),
-      child: AnimatedOpacity(
-        opacity: isProfileFetched ? 1 : 0,
-        duration: const Duration(milliseconds: 500),
-        child: isProfileFetched ? _imageView() : Container(),
-      ),
+      child: _imageView(),
     );
   }
 
   Widget _imageView() {
+    bool isProfileFetched = (widget.state.value.state == ProfileState.loaded);
     return Stack(
       children: [
         Positioned(
@@ -55,10 +51,12 @@ class _WheelProfileViewState extends State<WheelProfileView> {
           left: 0,
           right: 0,
           bottom: 0,
-          child: Image.asset(
-            widget.state.value.profileDTO.imageUrl,
-            fit: BoxFit.cover,
-          ),
+          child: isProfileFetched
+              ? Image.network(
+                  widget.state.value.profileDTO.imageUrl,
+                  fit: BoxFit.cover,
+                )
+              : Container(),
         ),
         if (widget.showIndex)
           Positioned(

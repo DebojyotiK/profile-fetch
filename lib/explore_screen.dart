@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:profile_fetch/app_colors.dart';
 import 'package:profile_fetch/carousel_profile_view.dart';
 import 'package:profile_fetch/profile_bloc.dart';
+import 'package:profile_fetch/wheel_profile_view.dart';
+import 'package:spinner/spinner/index.dart';
 
 import 'explore_page_state_data.dart';
 
@@ -17,6 +19,7 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen> {
   final ProfileBloc _profileBloc = ProfileBloc();
+  bool get _showIndex => false;
 
   @override
   void initState() {
@@ -36,40 +39,78 @@ class _ExploreScreenState extends State<ExploreScreen> {
           double cardWidth = MediaQuery.of(context).size.width * viewPortFraction;
           double aspectRatio = 0.75;
           double cardHeight = cardWidth / aspectRatio;
+          double radius = 160;
           return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
+              Container(
                 padding: const EdgeInsets.only(top: 16),
-                child: CarouselSlider.builder(
-                  options: CarouselOptions(
-                    height: cardHeight,
-                    enlargeCenterPage: false,
-                    clipBehavior: Clip.none,
-                    viewportFraction: viewPortFraction,
-                    initialPage: _profileBloc.wheelToCarouselIndex(centerElementIndex),
-                  ),
-                  itemCount: _profileBloc.totalElementsInWheel,
-                  itemBuilder: (context, index, realIndex, offset) {
-                    int wheelIndex = _profileBloc.carouselToWheelIndex(index);
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: _transformedChild(
-                        offset,
-                        CarouselProfileView(
-                          carouselIndex: index,
-                          wheelIndex: wheelIndex,
-                          state: value.profileStatesNotifier[wheelIndex],
-                          showIndex: true,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )
+                child: _carouselView(cardHeight, viewPortFraction, value),
+              ),
+              Spinner(
+                radius: radius,
+                innerRadius: 0.5 * radius,
+                elementsPerHalf: value.spinnerController.elementsPerHalf,
+                showDebugViews: false,
+                elementBuilder: (index) {
+                  return WheelProfileView(
+                    index: index,
+                    state: value.profileStatesNotifier[index],
+                    showIndex: _showIndex,
+                  );
+                },
+                onEnteredViewPort: (indexes) {
+                  debugPrint("$indexes entered view port");
+                  // for (var index in indexes) {
+                  //   _imageFetcher.fetchImage(index);
+                  // }
+                },
+                onLeftViewPort: (indexes) {
+                  debugPrint("$indexes left view port");
+                  // for (var index in indexes) {
+                  //   _imageFetcher.cancelFetchingImage(index);
+                  // }
+                },
+                onElementTapped: (index) {
+                  debugPrint("$index was tapped");
+                },
+                onElementCameToCenter: (index) {
+                  debugPrint("$index came to center");
+                },
+                spinnerController: value.spinnerController,
+              ),
             ],
           );
         }
         return const SizedBox();
+      },
+    );
+  }
+
+  CarouselSlider _carouselView(double cardHeight, double viewPortFraction, ExplorePageStateData value) {
+    return CarouselSlider.builder(
+      options: CarouselOptions(
+        height: cardHeight,
+        enlargeCenterPage: false,
+        clipBehavior: Clip.none,
+        viewportFraction: viewPortFraction,
+        initialPage: _profileBloc.wheelToCarouselIndex(centerElementIndex),
+      ),
+      itemCount: _profileBloc.totalElementsInWheel,
+      itemBuilder: (context, index, realIndex, offset) {
+        int wheelIndex = _profileBloc.carouselToWheelIndex(index);
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: _transformedChild(
+            offset,
+            CarouselProfileView(
+              carouselIndex: index,
+              wheelIndex: wheelIndex,
+              state: value.profileStatesNotifier[wheelIndex],
+              showIndex: _showIndex,
+            ),
+          ),
+        );
       },
     );
   }
