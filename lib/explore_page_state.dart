@@ -45,11 +45,12 @@ class ExplorePageState {
         _profileStatesNotifier = profiles.map((e) => ValueNotifier(ProfileInfo.loaded(e))).toList(),
         _elementsInWheel = null;
 
-  ExplorePageState.loadedWheel(
-    List<ProfileDTO> profiles,
-    int elementsInWheel,
-    this._nextFetchIndex,
-  )   : _state = State.loadedWheel,
+  ExplorePageState.loadedWheel({
+    required List<ProfileDTO> profiles,
+    required int elementsInWheel,
+    required int nextFetchIndex,
+  })  : _state = State.loadedWheel,
+        _nextFetchIndex = nextFetchIndex,
         _elementsInWheel = elementsInWheel,
         _profileStatesNotifier = List.generate(
           elementsInWheel * 2,
