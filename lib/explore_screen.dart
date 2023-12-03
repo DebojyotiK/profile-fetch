@@ -46,6 +46,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     enlargeCenterPage: false,
                     clipBehavior: Clip.none,
                     viewportFraction: viewPortFraction,
+                    initialPage: _profileBloc.wheelToCarouselIndex(centerElementIndex),
                   ),
                   itemCount: _profileBloc.totalElementsInWheel,
                   itemBuilder: (context, index, realIndex, offset) {
@@ -55,8 +56,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       child: _transformedChild(
                         offset,
                         CarouselProfileView(
-                          index: wheelIndex,
+                          carouselIndex: index,
+                          wheelIndex: wheelIndex,
                           state: value.profileStatesNotifier[wheelIndex],
+                          showIndex: true,
                         ),
                       ),
                     );

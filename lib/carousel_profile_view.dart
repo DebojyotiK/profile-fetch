@@ -4,14 +4,16 @@ import 'package:profile_fetch/extension_helper.dart';
 import 'package:profile_fetch/profile_state.dart';
 
 class CarouselProfileView extends StatefulWidget {
-  final int index;
+  final int carouselIndex;
+  final int wheelIndex;
   final bool showIndex;
   final ValueNotifier<ProfileInfo> state;
   final VoidCallback? onSendRequest;
 
   const CarouselProfileView({
     Key? key,
-    required this.index,
+    required this.carouselIndex,
+    required this.wheelIndex,
     this.showIndex = false,
     required this.state,
     this.onSendRequest,
@@ -40,7 +42,6 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    bool isProfileFetched = (widget.state.value.state == ProfileState.loaded);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: const Color(0xffd7d7d7)),
@@ -58,11 +59,7 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
         borderRadius: _borderRadius,
         child: Container(
           color: const Color(0xffe5e5e5),
-          child: AnimatedOpacity(
-            opacity: isProfileFetched ? 1 : 0,
-            duration: const Duration(milliseconds: 500),
-            child: isProfileFetched ? _profileView() : Container(),
-          ),
+          child: _profileView(),
         ),
       ),
     );
@@ -71,9 +68,10 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
   BorderRadius get _borderRadius => BorderRadius.circular(12);
 
   Widget _profileView() {
+    bool isProfileFetched = (widget.state.value.state == ProfileState.loaded);
     return Stack(
       children: [
-        Positioned(
+        isProfileFetched ? Positioned(
           top: 0,
           left: 0,
           right: 0,
@@ -82,13 +80,13 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
             widget.state.value.profileDTO.imageUrl,
             fit: BoxFit.cover,
           ),
-        ),
+        ) : Container(),
         if (widget.showIndex)
           Positioned(
             child: Container(
               alignment: Alignment.center,
               child: Text(
-                "${widget.index}",
+                "CI:${widget.carouselIndex} ,WI:${widget.wheelIndex}",
                 style: TextStyle(
                   fontSize: 48,
                   inherit: false,
@@ -106,7 +104,7 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
             child: Container(
               alignment: Alignment.center,
               child: Text(
-                "${widget.index}",
+                "CI:${widget.carouselIndex} ,WI:${widget.wheelIndex}",
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 48,
@@ -116,7 +114,8 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
               ),
             ),
           ),
-        Positioned(
+        if(isProfileFetched)
+          Positioned(
           bottom: 0,
           left: 0,
           right: 0,

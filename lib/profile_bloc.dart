@@ -33,12 +33,14 @@ class ProfileBloc {
   }
 
   int carouselToWheelIndex(int index) {
-    return totalElementsInWheel - index;
+    return _maxIndex - index;
   }
 
-  int get totalElementsInWheel => (elementsPerHalf * 2 - 1);
+  int get totalElementsInWheel => (elementsPerHalf * 2);
+
+  int get _maxIndex => (totalElementsInWheel - 1);
 
   int wheelToCarouselIndex(int index) {
-    return totalElementsInWheel - index;
+    return _maxIndex - index;
   }
 }
