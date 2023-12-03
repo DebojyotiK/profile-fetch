@@ -47,6 +47,7 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
+      //This is added to prevent interaction of side cards
       ignoring: widget.offset != 0,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
