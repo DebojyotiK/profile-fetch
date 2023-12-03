@@ -20,9 +20,11 @@ packages:
   carousel_slider:
     dependency: "direct main"
     description:
-      path: "../../carousel_slider"
-      relative: true
-    source: path
+      path: "."
+      ref: "v0.0.1"
+      resolved-ref: "132e17ed42ee9abf81cf91bc5c5a64d866d87f38"
+      url: "https://github.com/DebojyotiK/carousel-slider-custom.git"
+    source: git
     version: "4.2.1"
   characters:
     dependency: transitive
@@ -138,9 +140,11 @@ packages:
   spinner:
     dependency: "direct main"
     description:
-      path: "../../circular-scroll"
-      relative: true
-    source: path
+      path: "."
+      ref: "v0.0.1"
+      resolved-ref: "4a9f7587e9c72b37297e8edfadceea434a12641d"
+      url: "https://github.com/DebojyotiK/circular-scroll.git"
+    source: git
     version: "1.0.0+1"
   stack_trace:
     dependency: transitive

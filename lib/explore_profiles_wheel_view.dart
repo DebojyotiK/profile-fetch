@@ -46,22 +46,16 @@ class ExploreProfilesWheelView extends StatelessWidget {
             );
           },
           onEnteredViewPort: (indices, reason) {
-            debugPrint("$indices entered view port");
             if (reason != SpinnerChangeReason.initialize) {
               stateData.markProfileIndicesAsLoading(indices);
             }
           },
           onLeftViewPort: (indices, reason) {
-            debugPrint("$indices left view port");
             if (reason != SpinnerChangeReason.initialize) {
               stateData.markProfileIndicesAsInvisible(indices);
             }
           },
-          onElementTapped: (index) {
-            debugPrint("$index was tapped");
-          },
           onElementCameToCenter: (index, reason) {
-            debugPrint("$index came to center");
             if (stateData.carouselController.ready && reason == SpinnerChangeReason.scrollEnd) {
               stateData.carouselController.animateToPage(profileBloc.wheelToCarouselIndex(index));
               profileBloc.fetchNextProfiles();
@@ -86,7 +80,9 @@ class ExploreProfilesWheelView extends StatelessWidget {
         viewportFraction: viewPortFraction,
         initialPage: profileBloc.wheelToCarouselIndex(centerElementIndex),
         onPageChanged: (index, reason) {
-          value.spinnerController.bringElementAtIndexToCenter(profileBloc.carouselToWheelIndex(index));
+          if(reason == CarouselPageChangedReason.manual){
+            value.spinnerController.bringElementAtIndexToCenter(profileBloc.carouselToWheelIndex(index));
+          }
         },
       ),
       itemCount: value.profileStates.length,

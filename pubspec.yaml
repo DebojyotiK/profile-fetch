@@ -32,9 +32,14 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   carousel_slider:
-    path: ../../carousel_slider
+    git:
+      url: https://github.com/DebojyotiK/carousel-slider-custom.git
+      ref: v0.0.1
+
   spinner:
-    path: ../../circular-scroll
+    git:
+      url: https://github.com/DebojyotiK/circular-scroll.git
+      ref: v0.0.1
 
 dev_dependencies:
   flutter_test:

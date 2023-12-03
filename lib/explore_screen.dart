@@ -16,7 +16,7 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   final ProfileBloc _profileBloc = ProfileBloc();
 
-  bool get _showIndex => true;
+  bool get _showIndex => false;
 
   @override
   void initState() {

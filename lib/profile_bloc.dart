@@ -36,9 +36,11 @@ class ProfileBloc {
 
   void fetchNextProfiles() async {
     if (explorePageNotifier.value.status == Status.loadedWheel) {
+      int nextFetchIndex = explorePageNotifier.value.nextFetchIndex;
+      int profilesInLoadingState = explorePageNotifier.value.profilesInLoadingState;
       ProfileResult profileResult = await _profileFetcher.getProfiles(
-        currentIndex: explorePageNotifier.value.nextFetchIndex,
-        limit: explorePageNotifier.value.profilesInLoadingState,
+        currentIndex: nextFetchIndex,
+        limit: profilesInLoadingState,
       );
       if (_hasProfilesExhausted(profileResult)) {
         explorePageNotifier.value = ExplorePageStateData.loadedLimited(

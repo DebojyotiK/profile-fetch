@@ -38,11 +38,11 @@ class _WheelProfileViewState extends State<WheelProfileView> {
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xffe5e5e5),
-      child: _imageView(),
+      child: _profileView(),
     );
   }
 
-  Widget _imageView() {
+  Widget _profileView() {
     bool isProfileFetched = (widget.state.value.state == ProfileState.loaded);
     return Stack(
       children: [
@@ -51,22 +51,7 @@ class _WheelProfileViewState extends State<WheelProfileView> {
           left: 0,
           right: 0,
           bottom: 0,
-          child: isProfileFetched
-              ? Image.network(
-                  widget.state.value.profileDTO.imageUrl,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return const SizedBox.shrink();
-                  },
-                )
-              : Container(),
+          child: isProfileFetched ? _imageView() : Container(),
         ),
         if (widget.showIndex)
           Positioned(
@@ -102,6 +87,23 @@ class _WheelProfileViewState extends State<WheelProfileView> {
             ),
           )
       ],
+    );
+  }
+
+  Widget _imageView() {
+    return Image.network(
+      widget.state.value.profileDTO.imageUrl,
+      fit: BoxFit.cover,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) {
+          return child;
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+      errorBuilder: (context, error, stackTrace) {
+        return const SizedBox.shrink();
+      },
     );
   }
 }
