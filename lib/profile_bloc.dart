@@ -14,7 +14,6 @@ class ProfileBloc {
 
   void fetchProfiles() async {
     explorePageNotifier.value = ExplorePageStateData.loading();
-    await Future.delayed(const Duration(seconds: 2));
     ProfileResult profileResult = await _profileFetcher.getProfiles(
       currentIndex: 0,
       limit: elementsPerHalf,
@@ -30,6 +29,33 @@ class ProfileBloc {
         spinnerController: SpinnerController(elementsPerHalf),
       );
     }
+  }
+
+  void fetchNextProfiles() async {
+    ProfileResult profileResult = await _profileFetcher.getProfiles(
+      currentIndex: explorePageNotifier.value.nextFetchIndex,
+      limit: explorePageNotifier.value.profilesInLoadingState,
+    );
+    if (_hasProfilesExhausted(profileResult)) {
+      explorePageNotifier.value = ExplorePageStateData.loadedLimited(profileResult.profiles);
+    } else {
+      int updatedProfiles = explorePageNotifier.value.loadProfiles(profileResult.profiles);
+      if (_allLoadingProfilesWereUpdated(updatedProfiles)) {
+        explorePageNotifier.value.nextFetchIndex = profileResult.nextIndex;
+      } else if (_resultLessThanQueried()) {
+        //Probably we reached the end..Hence fetching from the beginning
+        explorePageNotifier.value.nextFetchIndex = 0;
+        fetchNextProfiles();
+      }
+    }
+  }
+
+  bool _resultLessThanQueried() => explorePageNotifier.value.profilesInLoadingState > 0;
+
+  bool _allLoadingProfilesWereUpdated(int updatedProfiles) => (explorePageNotifier.value.profilesInLoadingState == 0) && updatedProfiles > 0;
+
+  bool _hasProfilesExhausted(ProfileResult profileResult) {
+    return explorePageNotifier.value.nextFetchIndex == 0 && profileResult.profiles.length < explorePageNotifier.value.profilesInLoadingState;
   }
 
   int carouselToWheelIndex(int index) {

@@ -90,7 +90,7 @@ class ExplorePageStateData {
     }
   }
 
-  void loadProfiles(
+  int loadProfiles(
     List<ProfileDTO> profiles,
   ) {
     int i = 0;
@@ -102,6 +102,7 @@ class ExplorePageStateData {
         }
       }
     }
+    return i;
   }
 
   void removeCenterProfile(int centerIndex) {

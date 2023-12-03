@@ -80,6 +80,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   debugPrint("$index came to center");
                   if (value.carouselController.ready && reason == SpinnerChangeReason.scrollEnd) {
                     value.carouselController.animateToPage(_profileBloc.wheelToCarouselIndex(index));
+                    _profileBloc.fetchNextProfiles();
                   }
                 },
                 spinnerController: value.spinnerController,
