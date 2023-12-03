@@ -93,7 +93,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  CarouselSlider _carouselView(double cardHeight, double viewPortFraction, ExplorePageStateData value) {
+  CarouselSlider _carouselView(
+    double cardHeight,
+    double viewPortFraction,
+    ExplorePageStateData value,
+  ) {
     return CarouselSlider.builder(
       options: CarouselOptions(
         height: cardHeight,
@@ -108,21 +112,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
       itemCount: _profileBloc.totalElementsInWheel,
       itemBuilder: (context, index, realIndex, offset) {
         int wheelIndex = _profileBloc.carouselToWheelIndex(index);
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: _transformedChild(
-            offset,
-            CarouselProfileView(
-              carouselIndex: index,
-              wheelIndex: wheelIndex,
-              state: value.profileStatesNotifier[wheelIndex],
-              showIndex: _showIndex,
-              onSendRequest: (){
-                value.removeCenterProfile(wheelIndex);
-                _profileBloc.fetchNextProfiles();
-              },
-            ),
-          ),
+        return CarouselProfileView(
+          carouselIndex: index,
+          wheelIndex: wheelIndex,
+          state: value.profileStatesNotifier[wheelIndex],
+          showIndex: _showIndex,
+          offset: offset,
+          onSendRequest: () {
+            value.removeCenterProfile(wheelIndex);
+            _profileBloc.fetchNextProfiles();
+          },
         );
       },
       carouselController: value.carouselController,
@@ -139,20 +138,5 @@ class _ExploreScreenState extends State<ExploreScreen> {
         ),
       ),
     );
-  }
-
-  Transform _transformedChild(
-    double offset,
-    Widget child,
-  ) {
-    return Transform.rotate(
-      alignment: offset > 0 ? Alignment.bottomRight : Alignment.bottomLeft,
-      angle: -1 * degreesToRadians(5) * offset,
-      child: child,
-    );
-  }
-
-  double degreesToRadians(double degrees) {
-    return degrees * (pi / 180.0);
   }
 }
