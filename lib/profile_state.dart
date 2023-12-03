@@ -33,6 +33,6 @@ class ProfileInfo {
         _profileDTO = null;
 
   ProfileInfo.loaded(ProfileDTO profileDTO)
-      : _state = ProfileState.loading,
+      : _state = ProfileState.loaded,
         _profileDTO = profileDTO;
 }

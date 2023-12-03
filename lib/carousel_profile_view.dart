@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:profile_fetch/app_button.dart';
+import 'package:profile_fetch/extension_helper.dart';
 import 'package:profile_fetch/profile_state.dart';
 
 class CarouselProfileView extends StatefulWidget {
   final int index;
   final bool showIndex;
   final ValueNotifier<ProfileInfo> state;
+  final VoidCallback? onSendRequest;
 
   const CarouselProfileView({
     Key? key,
     required this.index,
     this.showIndex = false,
     required this.state,
+    this.onSendRequest,
   }) : super(key: key);
 
   @override
@@ -37,26 +41,30 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
   @override
   Widget build(BuildContext context) {
     bool isProfileFetched = (widget.state.value.state == ProfileState.loaded);
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0xffe8e8e8),
-            offset: Offset(-2, 1),
-            blurRadius: 13,
-            spreadRadius: 5,
-          ),
-        ],
-        borderRadius: _borderRadius,
-      ),
-      child: ClipRRect(
-        borderRadius: _borderRadius,
-        child: Container(
-          color: const Color(0xffe5e5e5),
-          child: AnimatedOpacity(
-            opacity: isProfileFetched ? 1 : 0,
-            duration: const Duration(milliseconds: 500),
-            child: isProfileFetched ? _profileView() : Container(),
+    return AspectRatio(
+      aspectRatio: 0.75,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xffd7d7d7)),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0xffd7d7d7),
+              offset: Offset(-2, 1),
+              blurRadius: 13,
+              spreadRadius: 5,
+            ),
+          ],
+          borderRadius: _borderRadius,
+        ),
+        child: ClipRRect(
+          borderRadius: _borderRadius,
+          child: Container(
+            color: const Color(0xffe5e5e5),
+            child: AnimatedOpacity(
+              opacity: isProfileFetched ? 1 : 0,
+              duration: const Duration(milliseconds: 500),
+              child: isProfileFetched ? _profileView() : Container(),
+            ),
           ),
         ),
       ),
@@ -73,7 +81,7 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
           left: 0,
           right: 0,
           bottom: 0,
-          child: Image.asset(
+          child: Image.network(
             widget.state.value.profileDTO.imageUrl,
             fit: BoxFit.cover,
           ),
@@ -124,17 +132,27 @@ class _CarouselProfileViewState extends State<CarouselProfileView> {
                   children: [
                     Expanded(
                       child: Text(
-                        widget.state.value.profileDTO.imageUrl,
+                        widget.state.value.profileDTO.name,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
                   ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppButton.primary(
+                        text: 'Send Request',
+                        onTap: widget.onSendRequest,
+                      ),
+                    )
+                  ],
                 )
-              ],
+              ].spaceVertically(12),
             ),
           ),
         ),

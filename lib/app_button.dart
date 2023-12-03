@@ -3,8 +3,8 @@ import 'package:profile_fetch/extension_helper.dart';
 
 import 'app_colors.dart';
 
-double _buttonFontSizeMedium = 16;
-double _buttonFontSizeNormal = 14;
+double _buttonFontSizeMedium = 14;
+double _buttonFontSizeNormal = 12;
 
 enum ButtonSize {
   medium,
@@ -49,9 +49,9 @@ class AppButton extends StatelessWidget {
     this.buttonSize = ButtonSize.medium,
   })  : backgroundColor = isEnabled ? AppColors.appButton : AppColors.grey400,
         borderColor = Colors.transparent,
-        highlightColor = const Color(0xff6ea4f1),
+        highlightColor = const Color(0xffaafaaa),
         splashColor = Colors.white.withOpacity(0.7),
-        textColor = Colors.white;
+        textColor = Colors.black;
 
   const AppButton.secondary({
     super.key,
@@ -118,7 +118,7 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cornerRadius = BorderRadius.circular(8);
+    var cornerRadius = BorderRadius.circular(40);
     return Container(
       decoration: BoxDecoration(
         borderRadius: cornerRadius,
@@ -174,9 +174,9 @@ class AppButton extends StatelessWidget {
 
   EdgeInsets _getButtonInset() {
     if (buttonSize == ButtonSize.medium) {
-      return const EdgeInsets.all(12);
-    } else {
       return const EdgeInsets.all(8);
+    } else {
+      return const EdgeInsets.all(4);
     }
   }
 }

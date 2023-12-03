@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const appButton = Color(0xff1570EF);
+  static const appButton = Color(0xFF44fb46);
   static const textFieldLabelColor = Color(0xFF344054);
   static const grey100 = Color(0xFFF2F4F7);
   static const grey300 = Color(0xFFD0D5DD);

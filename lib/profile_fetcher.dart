@@ -1,7 +1,7 @@
 import 'profile_state.dart';
 import 'package:async/async.dart';
 
-List<ProfileDTO> _profilesAll = [
+final List<ProfileDTO> profilesAll = [
   ProfileDTO(
     imageUrl:
         'https://images.unsplash.com/photo-1682686581221-c126206d12f0?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -89,7 +89,7 @@ List<ProfileDTO> _profilesAll = [
   ),
 ];
 
-List<ProfileDTO> _profilesMini = _profilesAll.sublist(0, 3);
+final List<ProfileDTO> profilesMini = profilesAll.sublist(0, 3);
 
 class ProfileResult {
   final int nextIndex;
@@ -124,7 +124,7 @@ class ProfileFetcher {
   }
 
   Future<ProfileResult> _getProfilesInt(int currentIndex, int limit) async {
-    List<ProfileDTO> profileDatabase = List.from(_profilesAll);
+    List<ProfileDTO> profileDatabase = List.from(profilesAll);
     List<ProfileDTO> profiles = profileDatabase.sublist(currentIndex, (currentIndex + limit).clamp(0, profileDatabase.length));
     int nextIndex = (currentIndex + limit);
     if (_isResultExhausted(nextIndex, profileDatabase)) {
