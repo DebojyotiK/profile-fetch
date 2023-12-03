@@ -103,6 +103,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
         clipBehavior: Clip.none,
         viewportFraction: viewPortFraction,
         initialPage: _profileBloc.wheelToCarouselIndex(centerElementIndex),
+        onPageChanged: (index, reason) {
+          value.spinnerController.bringElementAtIndexToCenter(_profileBloc.carouselToWheelIndex(index));
+        },
       ),
       itemCount: _profileBloc.totalElementsInWheel,
       itemBuilder: (context, index, realIndex, offset) {
